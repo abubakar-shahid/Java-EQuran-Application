@@ -6,8 +6,68 @@ import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 
 public class HomePage extends JFrame implements ActionListener {
+    private JMenuBar bar;
+    private JMenu menu;
+    private JMenu it1;
+    private JMenu it2;
+    private JMenuItem it3;
+    private JMenuItem startReading;
+    private JMenuItem continueReading;
+    private JMenuItem startListening;
+    private JMenuItem continueListening;
+    private JButton exit;
+    private JPanel footer;
+
     //---------------------------------------------------------------------------------------------------------
     public void runApplication() {
+        //Menu
+        bar = new JMenuBar();
+        menu = new JMenu("☰");
+        Font menuFont = bar.getFont();
+        Font newMenuFont = menuFont.deriveFont(30.0f);
+        menu.setFont(newMenuFont);
+
+        it1 = new JMenu("Read Qura'an");
+        it2 = new JMenu("Listen Recitation");
+        it3 = new JMenuItem("Support this App");
+
+        startReading = new JMenuItem("Start Reading");
+        continueReading = new JMenuItem("Continue Reading");
+        startListening = new JMenuItem("Start Listening");
+        continueListening = new JMenuItem("Continue Listening");
+
+        startReading.addActionListener(this);
+        continueReading.addActionListener(this);
+        startListening.addActionListener(this);
+        continueListening.addActionListener(this);
+        it3.addActionListener(this);
+
+        it1.add(startReading);
+        it1.add(continueReading);
+        it2.add(startListening);
+        it2.add(continueListening);
+
+        Font menuItemsFont1 = it1.getFont();
+        Font newMenuItemsFont1 = menuItemsFont1.deriveFont(18.0f);
+        it1.setFont(newMenuItemsFont1);
+        it2.setFont(newMenuItemsFont1);
+        it3.setFont(newMenuItemsFont1);
+
+        Font menuItemsFont2 = startReading.getFont();
+        Font newMenuItemsFont2 = menuItemsFont2.deriveFont(14.0f);
+        startReading.setFont(newMenuItemsFont2);
+        continueReading.setFont(newMenuItemsFont2);
+        startListening.setFont(newMenuItemsFont2);
+        continueListening.setFont(newMenuItemsFont2);
+
+        menu.add(it1);
+        menu.add(it2);
+        menu.add(it3);
+
+        bar.add(menu);
+        bar.setSize(500, 500);
+        bar.setPreferredSize(new Dimension(100, 40));
+
         //Header
         JLabel heading = new JLabel("\"Welcome to E-Qura'an Application\"");
         Font labelFont1 = heading.getFont();
@@ -23,37 +83,22 @@ public class HomePage extends JFrame implements ActionListener {
         BackgroundPanel backgroundPanel = new BackgroundPanel("D:\\FAST-NUCES l215845\\5th Semester\\Software Construction & Development\\Project\\Extras\\CoverPicture.png");
 
         //Footer
-        JButton support = new JButton("Support this App");
-        support.addActionListener(this);
-        JButton read = new JButton("Read Qura'an");
-        read.addActionListener(this);
-        JButton listen = new JButton("Listen Audio");
-        listen.addActionListener(this);
-        JButton exit = new JButton("Exit App");
+        exit = new JButton("Exit");
         exit.addActionListener(this);
+        exit.setFont(newMenuItemsFont1);
 
-        Font buttonFont = read.getFont();
-        Font newButtonFont = buttonFont.deriveFont(16.0f);
-        support.setFont(newButtonFont);
-        read.setFont(newButtonFont);
-        listen.setFont(newButtonFont);
-        exit.setFont(newButtonFont);
-
-        JPanel footer = new JPanel(new FlowLayout());
-        footer.add(support);
-        footer.add(read);
-        footer.add(listen);
+        footer = new JPanel(new FlowLayout());
         footer.add(exit);
 
         //Frame
         setLayout(new BorderLayout());
+        setJMenuBar(bar);
         add(header, BorderLayout.NORTH);
         add(backgroundPanel, BorderLayout.CENTER);
-        add(new JPanel(), BorderLayout.SOUTH);
         add(footer, BorderLayout.SOUTH);
 
         setTitle("E-Qura'an Application");
-        setSize(700, 700);
+        setSize(600, 700);
         addWindowListener(new MyWindowListener());
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
         setVisible(true);
@@ -66,14 +111,27 @@ public class HomePage extends JFrame implements ActionListener {
             case "Support this App":
                 Support sp = new Support();
                 break;
-            case "Read Qura'an":
-                Read rd = new Read();
+            case "Start Reading":
+                Read rd1 = new Read();
+                rd1.startReading();
                 break;
-            case "Listen Audio":
-                Listen ls = new Listen();
+            case "Continue Reading":
+                Read rd2 = new Read();
+                rd2.continueReading();
                 break;
-            case "Exit App":
-                System.exit(0);
+            case "Start Listening":
+                Listen ls1 = new Listen();
+                ls1.startListening();
+                break;
+            case "Continue Listening":
+                Listen ls2 = new Listen();
+                ls2.continueListening();
+                break;
+            case "Exit":
+                int choice = JOptionPane.showConfirmDialog(null, "Do you want to exit?", "Confirm Close", JOptionPane.YES_NO_OPTION);
+                if (choice == JOptionPane.YES_OPTION) {
+                    System.exit(0);
+                }
         }
     }
 
