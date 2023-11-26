@@ -10,22 +10,19 @@ public class Read extends JFrame implements ActionListener {
     private JButton b1, b2, b3;
     private JScrollPane scrollPane;
     private JPanel body;
-    private List<JButton> paras;
-    private List<JButton> surahs;
-    private List<JButton> manazil;
-    private HashMap<String, Integer> para = new HashMap<>();
-    private HashMap<String, Integer> surah = new HashMap<>();
-    private HashMap<String, Integer> manzil = new HashMap<>();
+    private List<JButton> paras, surahs, manazil;
+    private HashMap<String, Integer> para = new HashMap<>(), surah = new HashMap<>(), manzil = new HashMap<>();
     private int currentIndex = 0;
+    private ImageViewer imageViewer;
     private int[] id1 = {0, 19, 37, 55, 73, 91, 109, 127, 145, 163, 181, 199, 217, 235, 253, 271, 289, 307,
-            325, 343, 361, 379, 397, 415, 433, 451, 469, 487, 507, 527};
-    private int[] id2 = {0, 1, 44, 68, 95, 114, 135, 158, 167, 186, 198, 211, 223, 229, 234, 239, 253, 263,
-            274, 280, 289, 298, 307, 314, 323, 329, 338, 346, 356, 363, 369, 372, 375, 384, 390, 395, 400,
-            407, 411, 419, 428, 433, 439, 445, 447, 451, 455, 459, 462, 465, 467, 470, 472, 474, 477, 480,
-            483, 487, 490, 494, 496, 498, 499, 501, 503, 505, 507, 509, 511, 513, 515, 517, 519, 520, 522,
-            523, 525, 527, 528, 529, 531, 531, 532, 533, 534, 535, 536, 536, 537, 538, 539, 539, 540, 540,
-            541, 541, 542, 542, 543, 543, 543, 544, 544, 544, 545, 545, 545, 545, 546, 546, 546, 546, 547, 547};
-    private int[] id3 = {0, 95, 186, 253, 329, 400, 465};
+            325, 343, 361, 379, 397, 415, 433, 451, 469, 487, 507, 527},
+            id2 = {0, 1, 44, 68, 95, 114, 135, 158, 167, 186, 198, 211, 223, 229, 234, 239, 253, 263,
+                    274, 280, 289, 298, 307, 314, 323, 329, 338, 346, 356, 363, 369, 372, 375, 384, 390, 395, 400,
+                    407, 411, 419, 428, 433, 439, 445, 447, 451, 455, 459, 462, 465, 467, 470, 472, 474, 477, 480,
+                    483, 487, 490, 494, 496, 498, 499, 501, 503, 505, 507, 509, 511, 513, 515, 517, 519, 520, 522,
+                    523, 525, 527, 528, 529, 531, 531, 532, 533, 534, 535, 536, 536, 537, 538, 539, 539, 540, 540,
+                    541, 541, 542, 542, 543, 543, 543, 544, 544, 544, 545, 545, 545, 545, 546, 546, 546, 546, 547, 547},
+            id3 = {0, 95, 186, 253, 329, 400, 465};
     private String[] data1 = {
             "الفاتحة - al-Fātihah [THE OPENING]",
             "البقرة - al-Baqarah [THE COW]",
@@ -141,51 +138,48 @@ public class Read extends JFrame implements ActionListener {
             "الإخلاص - al-Ikhlās [PURITY]",
             "الفلق - al-Falaq [THE FISSION]",
             "الناس - al-Nās [MEN]"
-    };
-
-    private String[] data2 = {
-            "آلم (Alīf-Lām-Mīm)",
-            "سَيَقُولُ (Sayaqūlu)",
-            "تِلْكَ ٱلْرُّسُلُ (Tilka ’r-Rusulu)",
-            "لن تنالوا (Lan Tana Lu)",
-            "وَٱلْمُحْصَنَاتُ (Wa’l-muḥṣanātu)",
-            "لَا يُحِبُّ ٱللهُ (Lā yuḥibbu-’llāhu)",
-            "وَإِذَا سَمِعُوا (Wa ’Idha Samiʿū)",
-            "وَلَوْ أَنَّنَا (Wa-law annanā)",
-            "قَالَ ٱلْمَلَأُ (Qāla ’l-mala’u)",
-            "وَٱعْلَمُواْ (Wa-’aʿlamū)",
-            "يَعْتَذِرُونَ (Yaʿtazerūn)",
-            "وَمَا مِنْ دَآبَّةٍ (Wa mā min dābbatin)",
-            "وَمَا أُبَرِّئُ (Wa mā ubarri’u)",
-            "رُبَمَا (Rubamā)",
-            "سُبْحَانَ ٱلَّذِى (Subḥāna ’lladhī)",
-            "قَالَ أَلَمْ (Qāla ’alam)",
-            "ٱقْتَرَبَ لِلْنَّاسِ (Iqtaraba li’n-nāsi)",
-            "قَدْ أَفْلَحَ (Qad ’aflaḥa)",
-            "وَقَالَ ٱلَّذِينَ (Wa-qāla ’lladhīna)",
-            "أَمَّنْ خَلَقَ (’A’man Khalaqa)",
-            "أُتْلُ مَاأُوْحِیَ (Otlu ma oohiya)",
-            "وَمَنْ يَّقْنُتْ (Wa-man yaqnut)",
-            "وَمَآ لي (Wa-Mali)",
-            "فَمَنْ أَظْلَمُ (Fa-man ’aẓlamu)",
-            "إِلَيْهِ يُرَدُّ (Ilayhi yuraddu)",
-            "حم (Ḥā’ Mīm)",
-            "قَالَ فَمَا خَطْبُكُم (Qāla fa-mā khaṭbukum)",
-            "قَدْ سَمِعَ ٱللهُ (Qad samiʿa ’llāhu)",
-            "تَبَارَكَ ٱلَّذِى (Tabāraka ’lladhī)",
-            "عَمَّ (‘Amma)"
-    };
-
-    private String[] data3 = {
-            "1.الفاتحة - al-Fātihah [THE OPENING]",
-            "2.المائدة - al-Mā’idah [THE TABLE SPREAD]",
-            "3.يونس - Yūnus [JONAH]",
-            "4.الإسراء - al-Isrā’ [THE NIGHT JOURNEY]",
-            "5.الشعراء - ash-Shu‘arā’ [THE POETS]",
-            "6.الصافات - as-Sāffāt [THOSE RANGED IN RANKS]",
-            "7.ق - Qāf [QAF]"
-    };
-    private ImageViewer imageViewer;
+    },
+            data2 = {
+                    "آلم (Alīf-Lām-Mīm)",
+                    "سَيَقُولُ (Sayaqūlu)",
+                    "تِلْكَ ٱلْرُّسُلُ (Tilka ’r-Rusulu)",
+                    "لن تنالوا (Lan Tana Lu)",
+                    "وَٱلْمُحْصَنَاتُ (Wa’l-muḥṣanātu)",
+                    "لَا يُحِبُّ ٱللهُ (Lā yuḥibbu-’llāhu)",
+                    "وَإِذَا سَمِعُوا (Wa ’Idha Samiʿū)",
+                    "وَلَوْ أَنَّنَا (Wa-law annanā)",
+                    "قَالَ ٱلْمَلَأُ (Qāla ’l-mala’u)",
+                    "وَٱعْلَمُواْ (Wa-’aʿlamū)",
+                    "يَعْتَذِرُونَ (Yaʿtazerūn)",
+                    "وَمَا مِنْ دَآبَّةٍ (Wa mā min dābbatin)",
+                    "وَمَا أُبَرِّئُ (Wa mā ubarri’u)",
+                    "رُبَمَا (Rubamā)",
+                    "سُبْحَانَ ٱلَّذِى (Subḥāna ’lladhī)",
+                    "قَالَ أَلَمْ (Qāla ’alam)",
+                    "ٱقْتَرَبَ لِلْنَّاسِ (Iqtaraba li’n-nāsi)",
+                    "قَدْ أَفْلَحَ (Qad ’aflaḥa)",
+                    "وَقَالَ ٱلَّذِينَ (Wa-qāla ’lladhīna)",
+                    "أَمَّنْ خَلَقَ (’A’man Khalaqa)",
+                    "أُتْلُ مَاأُوْحِیَ (Otlu ma oohiya)",
+                    "وَمَنْ يَّقْنُتْ (Wa-man yaqnut)",
+                    "وَمَآ لي (Wa-Mali)",
+                    "فَمَنْ أَظْلَمُ (Fa-man ’aẓlamu)",
+                    "إِلَيْهِ يُرَدُّ (Ilayhi yuraddu)",
+                    "حم (Ḥā’ Mīm)",
+                    "قَالَ فَمَا خَطْبُكُم (Qāla fa-mā khaṭbukum)",
+                    "قَدْ سَمِعَ ٱللهُ (Qad samiʿa ’llāhu)",
+                    "تَبَارَكَ ٱلَّذِى (Tabāraka ’lladhī)",
+                    "عَمَّ (‘Amma)"
+            },
+            data3 = {
+                    "1.الفاتحة - al-Fātihah [THE OPENING]",
+                    "2.المائدة - al-Mā’idah [THE TABLE SPREAD]",
+                    "3.يونس - Yūnus [JONAH]",
+                    "4.الإسراء - al-Isrā’ [THE NIGHT JOURNEY]",
+                    "5.الشعراء - ash-Shu‘arā’ [THE POETS]",
+                    "6.الصافات - as-Sāffāt [THOSE RANGED IN RANKS]",
+                    "7.ق - Qāf [QAF]"
+            };
 
     //---------------------------------------------------------------------------------------------------------
     public void setCurrentIndex(int id) {
@@ -248,7 +242,6 @@ public class Read extends JFrame implements ActionListener {
 
     public void continueReading(int pageNo) {
         imageViewer = new ImageViewer();
-        System.out.println(pageNo);
         imageViewer.currentIndex = pageNo;
         imageViewer.imageViewer();
     }

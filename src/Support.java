@@ -12,19 +12,9 @@ import java.util.Calendar;
 import java.util.Date;
 
 public class Support extends JFrame implements ActionListener {
-    private JPanel header;
-    private JPanel body;
-    private JLabel heading;
-    private JLabel l1;
-    private JLabel l2;
-    private JLabel l3;
-    private JLabel l4;
-    private JLabel l5;
-    private JTextField holderName;
-    private JTextField crdNumber;
-    private JTextField expDate;
-    private JTextField cvv;
-    private JTextField amount;
+    private JPanel header, body;
+    private JLabel heading, l1, l2, l3, l4, l5;
+    private JTextField holderName, crdNumber, expDate, cvv, amount;
     private JButton confirmation;
 
     //---------------------------------------------------------------------------------------------------------

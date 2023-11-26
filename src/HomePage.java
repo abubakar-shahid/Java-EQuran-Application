@@ -11,16 +11,10 @@ public class HomePage extends JFrame implements ActionListener {
     Read rd = new Read();
     Listen ls = new Listen();
     private JMenuBar bar;
-    private JMenu menu;
-    private JMenu it1;
-    private JMenu it2;
+    private JMenu menu, it1, it2;
     private JMenuItem it3;
-    private JMenuItem startReading;
-    private JMenuItem continueReading;
-    private JMenuItem startListening;
-    private JMenuItem continueListening;
-    private int currentPage;
-    private int currentAudio;
+    private JMenuItem startReading, continueReading, startListening, continueListening;
+    private int currentPage, currentAudio;
     private JButton exit;
     private JPanel footer;
 
@@ -30,7 +24,6 @@ public class HomePage extends JFrame implements ActionListener {
         getCurrentStates();
         rd.setCurrentIndex(currentPage);
         ls.setCurrentIndex(currentAudio);
-        System.out.println(currentPage + " , " + currentAudio);
 
         //Menu
         bar = new JMenuBar();
@@ -129,7 +122,6 @@ public class HomePage extends JFrame implements ActionListener {
 
     //---------------------------------------------------------------------------------------------------------
     private void setCurrentStates() throws SQLException {
-        System.out.println(String.valueOf(rd.getCurrentIndex()) + " , " + String.valueOf(ls.getCurrentIndex()));
         String query = "delete from savedData;";
         PreparedStatement preparedStatement1 = connection.prepareStatement(query);
         preparedStatement1.executeUpdate();
