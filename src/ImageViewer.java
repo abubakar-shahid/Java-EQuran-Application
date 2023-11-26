@@ -9,15 +9,11 @@ public class ImageViewer extends JFrame {
     protected int currentIndex;
     protected List<String> imagePaths;
 
-    public ImageViewer(){
-
-    }
-
     public void imageViewer() {
         setTitle("Image Viewer");
         addWindowListener(new MyWindowListener());
         setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-        setSize(600, 600);
+        setBounds(400,10,600,700);
 
         imagePaths = new ArrayList<>();
         for (int i = 2; i <= 549; i++) {
@@ -105,10 +101,6 @@ public class ImageViewer extends JFrame {
 
         @Override
         public void windowClosing(WindowEvent e) {
-//            int choice = JOptionPane.showConfirmDialog(null, "Quit Reading?", "Confirm Close", JOptionPane.YES_NO_OPTION);
-//            if (choice == JOptionPane.YES_OPTION) {
-//                dispose();
-//            }
             dispose();
         }
 

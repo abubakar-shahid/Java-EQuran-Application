@@ -170,7 +170,7 @@ public class Listen extends JFrame implements ActionListener {
         //Frame
         setLayout(new BorderLayout());
         setTitle("E-Qura'an Application");
-        setSize(600, 700);
+        setBounds(400,10,600,700);
         addWindowListener(new MyWindowListener());
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
         setVisible(true);

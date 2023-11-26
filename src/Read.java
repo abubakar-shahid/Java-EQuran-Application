@@ -190,7 +190,7 @@ public class Read extends JFrame implements ActionListener {
         //Frame
         setLayout(new BorderLayout());
         setTitle("E-Qura'an Application");
-        setSize(600, 700);
+        setBounds(400, 10, 600, 700);
         addWindowListener(new MyWindowListener());
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
         setVisible(true);
@@ -332,7 +332,9 @@ public class Read extends JFrame implements ActionListener {
 
         @Override
         public void windowClosing(WindowEvent e) {
-            currentIndex = imageViewer.currentIndex;
+            if (imageViewer != null) {
+                currentIndex = imageViewer.currentIndex;
+            }
             dispose();
         }
 

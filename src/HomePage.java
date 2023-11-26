@@ -44,6 +44,7 @@ public class HomePage extends JFrame implements ActionListener {
 
         startReading.addActionListener(this);
         continueReading.addActionListener(this);
+        openSpecificAyahRuku.addActionListener(this);
         startListening.addActionListener(this);
         continueListening.addActionListener(this);
         it3.addActionListener(this);
@@ -106,7 +107,7 @@ public class HomePage extends JFrame implements ActionListener {
         add(footer, BorderLayout.SOUTH);
 
         setTitle("E-Qura'an Application");
-        setSize(600, 700);
+        setBounds(400,10,600,700);
         addWindowListener(new MyWindowListener());
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
         setVisible(true);
@@ -158,7 +159,7 @@ public class HomePage extends JFrame implements ActionListener {
                 //ls.continueListening();
                 break;
             case "Open Specific Ayah/Ruku":
-
+                OpenSpecificAyahRuku obj = new OpenSpecificAyahRuku();
                 break;
             case "Exit":
                 int choice = JOptionPane.showConfirmDialog(null, "Do you want to exit?", "Confirm Close", JOptionPane.YES_NO_OPTION);
