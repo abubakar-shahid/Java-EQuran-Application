@@ -4,8 +4,13 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 
 public class HomePage extends JFrame implements ActionListener {
+    private static Connection connection;
     private JMenuBar bar;
     private JMenu menu;
     private JMenu it1;
@@ -15,11 +20,16 @@ public class HomePage extends JFrame implements ActionListener {
     private JMenuItem continueReading;
     private JMenuItem startListening;
     private JMenuItem continueListening;
+    private int currentPage = -1;
+    private int currentAudio = -1;
     private JButton exit;
     private JPanel footer;
 
     //---------------------------------------------------------------------------------------------------------
-    public void runApplication() {
+    public void runApplication(Connection conn) throws SQLException {
+        connection = conn;
+        getCurrentStates();
+
         //Menu
         bar = new JMenuBar();
         menu = new JMenu("☰");
@@ -105,6 +115,13 @@ public class HomePage extends JFrame implements ActionListener {
     }
 
     //---------------------------------------------------------------------------------------------------------
+    private void getCurrentStates() throws SQLException {
+        String query = "select * from users;";
+        Statement statement = connection.createStatement();
+        ResultSet resultSet = statement.executeQuery(query);
+    }
+
+    //---------------------------------------------------------------------------------------------------------
     @Override
     public void actionPerformed(ActionEvent e) {
         switch (e.getActionCommand()) {
@@ -116,8 +133,8 @@ public class HomePage extends JFrame implements ActionListener {
                 rd1.startReading();
                 break;
             case "Continue Reading":
-                Read rd2 = new Read();
-                rd2.continueReading();
+//                Read rd2 = new Read();
+//                rd2.continueReading();
                 break;
             case "Start Listening":
                 Listen ls1 = new Listen();
@@ -145,6 +162,7 @@ public class HomePage extends JFrame implements ActionListener {
         public void windowClosing(WindowEvent e) {
             int choice = JOptionPane.showConfirmDialog(null, "Do you want to exit?", "Confirm Close", JOptionPane.YES_NO_OPTION);
             if (choice == JOptionPane.YES_OPTION) {
+                //Save current page and audio
                 System.exit(0);
             }
         }
