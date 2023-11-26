@@ -13,7 +13,7 @@ public class HomePage extends JFrame implements ActionListener {
     private JMenuBar bar;
     private JMenu menu, it1, it2;
     private JMenuItem it3;
-    private JMenuItem startReading, continueReading, startListening, continueListening;
+    private JMenuItem startReading, continueReading, startListening, continueListening, openSpecificAyahRuku;
     private int currentPage, currentAudio;
     private JButton exit;
     private JPanel footer;
@@ -40,6 +40,7 @@ public class HomePage extends JFrame implements ActionListener {
         continueReading = new JMenuItem("Continue Reading");
         startListening = new JMenuItem("Start Listening");
         continueListening = new JMenuItem("Continue Listening");
+        openSpecificAyahRuku = new JMenuItem("Open Specific Ayah/Ruku");
 
         startReading.addActionListener(this);
         continueReading.addActionListener(this);
@@ -49,6 +50,7 @@ public class HomePage extends JFrame implements ActionListener {
 
         it1.add(startReading);
         it1.add(continueReading);
+        it1.add(openSpecificAyahRuku);
         it2.add(startListening);
         it2.add(continueListening);
 
@@ -62,6 +64,7 @@ public class HomePage extends JFrame implements ActionListener {
         Font newMenuItemsFont2 = menuItemsFont2.deriveFont(14.0f);
         startReading.setFont(newMenuItemsFont2);
         continueReading.setFont(newMenuItemsFont2);
+        openSpecificAyahRuku.setFont(newMenuItemsFont2);
         startListening.setFont(newMenuItemsFont2);
         continueListening.setFont(newMenuItemsFont2);
 
@@ -153,6 +156,9 @@ public class HomePage extends JFrame implements ActionListener {
             case "Continue Listening":
                 ls.setCurrentIndex(currentAudio);
                 //ls.continueListening();
+                break;
+            case "Open Specific Ayah/Ruku":
+
                 break;
             case "Exit":
                 int choice = JOptionPane.showConfirmDialog(null, "Do you want to exit?", "Confirm Close", JOptionPane.YES_NO_OPTION);
