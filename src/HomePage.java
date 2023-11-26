@@ -4,13 +4,12 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 
 public class HomePage extends JFrame implements ActionListener {
     private static Connection connection;
+    Read rd = new Read();
+    Listen ls = new Listen();
     private JMenuBar bar;
     private JMenu menu;
     private JMenu it1;
@@ -20,8 +19,8 @@ public class HomePage extends JFrame implements ActionListener {
     private JMenuItem continueReading;
     private JMenuItem startListening;
     private JMenuItem continueListening;
-    private int currentPage = -1;
-    private int currentAudio = -1;
+    private int currentPage;
+    private int currentAudio;
     private JButton exit;
     private JPanel footer;
 
@@ -29,6 +28,9 @@ public class HomePage extends JFrame implements ActionListener {
     public void runApplication(Connection conn) throws SQLException {
         connection = conn;
         getCurrentStates();
+        rd.setCurrentIndex(currentPage);
+        ls.setCurrentIndex(currentAudio);
+        System.out.println(currentPage + " , " + currentAudio);
 
         //Menu
         bar = new JMenuBar();
@@ -116,9 +118,27 @@ public class HomePage extends JFrame implements ActionListener {
 
     //---------------------------------------------------------------------------------------------------------
     private void getCurrentStates() throws SQLException {
-        String query = "select * from users;";
+        String query = "select * from savedData;";
         Statement statement = connection.createStatement();
         ResultSet resultSet = statement.executeQuery(query);
+        while (resultSet.next()) {
+            currentPage = Integer.parseInt(resultSet.getString(1));
+            currentAudio = Integer.parseInt(resultSet.getString(2));
+        }
+    }
+
+    //---------------------------------------------------------------------------------------------------------
+    private void setCurrentStates() throws SQLException {
+        System.out.println(String.valueOf(rd.getCurrentIndex()) + " , " + String.valueOf(ls.getCurrentIndex()));
+        String query = "delete from savedData;";
+        PreparedStatement preparedStatement1 = connection.prepareStatement(query);
+        preparedStatement1.executeUpdate();
+        query = "insert into savedData values (?, ?)";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setString(1, String.valueOf(rd.getCurrentIndex()));
+            preparedStatement.setString(2, String.valueOf(ls.getCurrentIndex()));
+            preparedStatement.executeUpdate();
+        }
     }
 
     //---------------------------------------------------------------------------------------------------------
@@ -129,20 +149,18 @@ public class HomePage extends JFrame implements ActionListener {
                 Support sp = new Support();
                 break;
             case "Start Reading":
-                Read rd1 = new Read();
-                rd1.startReading();
+                rd.startReading();
                 break;
             case "Continue Reading":
-//                Read rd2 = new Read();
-//                rd2.continueReading();
+                rd.setCurrentIndex(currentPage);
+                rd.continueReading(currentPage);
                 break;
             case "Start Listening":
-                Listen ls1 = new Listen();
-                ls1.startListening();
+                ls.startListening();
                 break;
             case "Continue Listening":
-                Listen ls2 = new Listen();
-                ls2.continueListening();
+                ls.setCurrentIndex(currentAudio);
+                //ls.continueListening();
                 break;
             case "Exit":
                 int choice = JOptionPane.showConfirmDialog(null, "Do you want to exit?", "Confirm Close", JOptionPane.YES_NO_OPTION);
@@ -162,7 +180,11 @@ public class HomePage extends JFrame implements ActionListener {
         public void windowClosing(WindowEvent e) {
             int choice = JOptionPane.showConfirmDialog(null, "Do you want to exit?", "Confirm Close", JOptionPane.YES_NO_OPTION);
             if (choice == JOptionPane.YES_OPTION) {
-                //Save current page and audio
+                try {
+                    setCurrentStates();
+                } catch (SQLException ex) {
+                    throw new RuntimeException(ex);
+                }
                 System.exit(0);
             }
         }

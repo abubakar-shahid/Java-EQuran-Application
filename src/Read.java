@@ -16,6 +16,7 @@ public class Read extends JFrame implements ActionListener {
     private HashMap<String, Integer> para = new HashMap<>();
     private HashMap<String, Integer> surah = new HashMap<>();
     private HashMap<String, Integer> manzil = new HashMap<>();
+    private int currentIndex = 0;
     private int[] id1 = {0, 19, 37, 55, 73, 91, 109, 127, 145, 163, 181, 199, 217, 235, 253, 271, 289, 307,
             325, 343, 361, 379, 397, 415, 433, 451, 469, 487, 507, 527};
     private int[] id2 = {0, 1, 44, 68, 95, 114, 135, 158, 167, 186, 198, 211, 223, 229, 234, 239, 253, 263,
@@ -184,10 +185,14 @@ public class Read extends JFrame implements ActionListener {
             "6.الصافات - as-Sāffāt [THOSE RANGED IN RANKS]",
             "7.ق - Qāf [QAF]"
     };
-    ImageViewer imageViewer;
+    private ImageViewer imageViewer;
 
     //---------------------------------------------------------------------------------------------------------
-    public Read() {
+    public void setCurrentIndex(int id) {
+        currentIndex = id;
+    }
+
+    public void startReading() {
         //Frame
         setLayout(new BorderLayout());
         setTitle("E-Qura'an Application");
@@ -195,9 +200,7 @@ public class Read extends JFrame implements ActionListener {
         addWindowListener(new MyWindowListener());
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
         setVisible(true);
-    }
 
-    public void startReading() {
         //Header
         b1 = new JButton("Para No.");
         b1.addActionListener(this);
@@ -243,9 +246,16 @@ public class Read extends JFrame implements ActionListener {
         add(header, BorderLayout.NORTH);
     }
 
-//    public void continueReading() {
-//
-//    }
+    public void continueReading(int pageNo) {
+        imageViewer = new ImageViewer();
+        System.out.println(pageNo);
+        imageViewer.currentIndex = pageNo;
+        imageViewer.imageViewer();
+    }
+
+    public int getCurrentIndex() {
+        return currentIndex;
+    }
 
     //---------------------------------------------------------------------------------------------------------
     private void sortByPara() {
@@ -329,6 +339,7 @@ public class Read extends JFrame implements ActionListener {
 
         @Override
         public void windowClosing(WindowEvent e) {
+            currentIndex = imageViewer.currentIndex;
             dispose();
         }
 

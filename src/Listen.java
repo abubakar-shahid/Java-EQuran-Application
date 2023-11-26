@@ -13,6 +13,7 @@ public class Listen extends JFrame implements ActionListener {
     private JPanel body;
     private List<JButton> surahs;
     private int selection;
+    private int currentIndex = 0;
     String[] data = {
             "الفاتحة - al-Fātihah [THE OPENING]",
             "البقرة - al-Baqarah [THE COW]",
@@ -131,14 +132,8 @@ public class Listen extends JFrame implements ActionListener {
     };
 
     //---------------------------------------------------------------------------------------------------------
-    public Listen() {
-        //Frame
-        setLayout(new BorderLayout());
-        setTitle("E-Qura'an Application");
-        setSize(600, 700);
-        addWindowListener(new MyWindowListener());
-        setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
-        setVisible(true);
+    public void setCurrentIndex(int id) {
+        currentIndex = id;
     }
 
     public void startListening() {
@@ -173,12 +168,21 @@ public class Listen extends JFrame implements ActionListener {
         sortByQ1();
 
         //Frame
+        setLayout(new BorderLayout());
+        setTitle("E-Qura'an Application");
+        setSize(600, 700);
+        addWindowListener(new MyWindowListener());
+        setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
+        setVisible(true);
         add(header, BorderLayout.NORTH);
-
     }
 
     public void continueListening() {
 
+    }
+
+    public int getCurrentIndex() {
+        return currentIndex;
     }
 
     //---------------------------------------------------------------------------------------------------------
