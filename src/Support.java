@@ -22,8 +22,10 @@ public class Support extends JFrame implements ActionListener {
         //Header
         heading = new JLabel("Payment Details");
         Font headingFont = heading.getFont();
-        Font newHeadingFont = headingFont.deriveFont(18.0f);
+        Font newHeadingFont = headingFont.deriveFont(42.0f);
         heading.setFont(newHeadingFont);
+        Font fontStyle = new Font(heading.getFont().getFamily(), Font.ITALIC | Font.BOLD, heading.getFont().getSize());
+        heading.setFont(fontStyle);
 
         header = new JPanel(new FlowLayout());
         header.add(heading);

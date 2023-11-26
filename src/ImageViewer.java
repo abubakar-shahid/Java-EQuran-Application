@@ -26,6 +26,10 @@ public class ImageViewer extends JFrame {
 
         JButton prevButton = new JButton("Previous");
         JButton nextButton = new JButton("Next");
+        Font buttonFont = prevButton.getFont();
+        Font newMenuFont = buttonFont.deriveFont(16.0f);
+        prevButton.setFont(newMenuFont);
+        nextButton.setFont(newMenuFont);
 
         prevButton.addActionListener(new ActionListener() {
             @Override
@@ -46,18 +50,18 @@ public class ImageViewer extends JFrame {
             public void keyPressed(KeyEvent e) {
                 switch (e.getKeyCode()) {
                     case KeyEvent.VK_LEFT:
-                        showPreviousImage();
+                        showNextImage();
                         break;
                     case KeyEvent.VK_RIGHT:
-                        showNextImage();
+                        showPreviousImage();
                         break;
                 }
             }
         });
 
         JPanel buttonPanel = new JPanel();
-        buttonPanel.add(prevButton);
         buttonPanel.add(nextButton);
+        buttonPanel.add(prevButton);
 
         add(imageLabel, BorderLayout.CENTER);
         add(buttonPanel, BorderLayout.SOUTH);
@@ -69,7 +73,7 @@ public class ImageViewer extends JFrame {
     private void showImage() {
         //System.out.println("in showImage() : " + currentIndex + " , " + imagePaths.get(currentIndex));
         ImageIcon imageIcon = new ImageIcon(imagePaths.get(currentIndex));
-        Image image = imageIcon.getImage().getScaledInstance(400, 500, Image.SCALE_DEFAULT);
+        Image image = imageIcon.getImage().getScaledInstance(500, 600, Image.SCALE_DEFAULT);
         imageIcon = new ImageIcon(image);
         imageLabel.setIcon(imageIcon);
     }
