@@ -8,8 +8,9 @@ import java.sql.*;
 
 public class HomePage extends JFrame implements ActionListener {
     private static Connection connection;
-    Read rd = new Read();
-    Listen ls = new Listen();
+    private ImageViewer imageViewer;
+    private Read rd = new Read(imageViewer);
+    private Listen ls = new Listen();
     private JMenuBar bar;
     private JMenu menu, it1, it2;
     private JMenuItem it3;
@@ -89,7 +90,7 @@ public class HomePage extends JFrame implements ActionListener {
         header.add(heading);
 
         //Body
-        BackgroundPanel backgroundPanel = new BackgroundPanel("D:\\FAST-NUCES l215845\\5th Semester\\Software Construction & Development\\Project\\Extras\\CoverPicture.png");
+        BackgroundPanel backgroundPanel = new BackgroundPanel("D:\\FAST-NUCES l215845\\5th Semester\\Software Construction & Development\\Project\\Extras\\Pictures\\CoverPicture.png");
 
         //Footer
         exit = new JButton("Exit");
@@ -159,7 +160,7 @@ public class HomePage extends JFrame implements ActionListener {
                 //ls.continueListening();
                 break;
             case "Open Specific Ayah/Ruku":
-                OpenSpecificAyahRuku obj = new OpenSpecificAyahRuku();
+                OpenSpecificAyahRuku obj = new OpenSpecificAyahRuku(connection);
                 break;
             case "Exit":
                 int choice = JOptionPane.showConfirmDialog(null, "Do you want to exit?", "Confirm Close", JOptionPane.YES_NO_OPTION);

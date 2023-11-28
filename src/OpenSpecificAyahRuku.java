@@ -4,8 +4,15 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 
 public class OpenSpecificAyahRuku extends JFrame implements ActionListener {
+    private Connection connection;
+    private ImageViewer imageViewer;
+    //private Read rd = new Read();
     private JPanel p1, p2, p3, body, footer;
     private JLabel surahName, selection, number;
     private JComboBox surah, select, num;
@@ -128,7 +135,9 @@ public class OpenSpecificAyahRuku extends JFrame implements ActionListener {
     },
             data2 = {"Ayah", "Ruku"};
 
-    public OpenSpecificAyahRuku() {
+    public OpenSpecificAyahRuku(Connection conn) {
+        connection = conn;
+
         String[] data3 = new String[286];
         for (int i = 0; i < 286; i++) {
             data3[i] = String.valueOf(i + 1);
@@ -152,7 +161,7 @@ public class OpenSpecificAyahRuku extends JFrame implements ActionListener {
         p1 = new JPanel(new FlowLayout());
         p2 = new JPanel(new FlowLayout());
         p3 = new JPanel(new FlowLayout());
-        body = new JPanel(new GridLayout(4,1));
+        body = new JPanel(new GridLayout(4, 1));
         footer = new JPanel(new FlowLayout());
 
         p1.add(surahName);
@@ -181,7 +190,77 @@ public class OpenSpecificAyahRuku extends JFrame implements ActionListener {
     //---------------------------------------------------------------------------------------------------------
     @Override
     public void actionPerformed(ActionEvent e) {
+        if (e.getActionCommand() == "Open") {
+            if (select.getSelectedItem() == "Ruku") {
+                try {
+                    getRukuData();
+                } catch (SQLException ex) {
+                    throw new RuntimeException(ex);
+                }
+            } else if (select.getSelectedItem() == "Ayah") {
+                try {
+                    getAyahData();
+                } catch (SQLException ex) {
+                    throw new RuntimeException(ex);
+                }
+            }
+        }
+    }
 
+    private void getRukuData() throws SQLException {
+        String query = "select * from rukuData;";
+        Statement statement = connection.createStatement();
+        ResultSet resultSet = statement.executeQuery(query);
+        int s = 0, r = 0;
+        for (int i = 0; i < 114; i++) {
+            if (data1[i].equals(surah.getSelectedItem())) {
+                s = i;
+            }
+        }
+        r = Integer.parseInt((String) num.getSelectedItem());
+        s++;
+        boolean found = false;
+        while (resultSet.next()) {
+            if (s == Integer.parseInt(resultSet.getString(1))
+                    && r == Integer.parseInt(resultSet.getString(2))) {
+                imageViewer = new ImageViewer();
+                imageViewer.currentIndex = (Integer.parseInt(resultSet.getString(3))) - 2;
+                imageViewer.imageViewer();
+                found = true;
+                break;
+            }
+        }
+        if (!found) {
+            JOptionPane.showMessageDialog(this, "Ruku Not Found!", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    private void getAyahData() throws SQLException {
+        String query = "select * from ayahData;";
+        Statement statement = connection.createStatement();
+        ResultSet resultSet = statement.executeQuery(query);
+        int s = 0, a = 0;
+        for (int i = 0; i < 114; i++) {
+            if (data1[i].equals(surah.getSelectedItem())) {
+                s = i;
+            }
+        }
+        a = Integer.parseInt((String) num.getSelectedItem());
+        s++;
+        boolean found = false;
+        while (resultSet.next()) {
+            if (s == Integer.parseInt(resultSet.getString(1))
+                    && a == Integer.parseInt(resultSet.getString(2))) {
+                imageViewer = new ImageViewer();
+                imageViewer.currentIndex = (Integer.parseInt(resultSet.getString(3))) - 2;
+                imageViewer.imageViewer();
+                found = true;
+                break;
+            }
+        }
+        if (!found) {
+            JOptionPane.showMessageDialog(this, "Ayah Not Found!", "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     //---------------------------------------------------------------------------------------------------------

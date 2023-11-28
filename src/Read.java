@@ -182,6 +182,9 @@ public class Read extends JFrame implements ActionListener {
             };
 
     //---------------------------------------------------------------------------------------------------------
+    public Read(ImageViewer img){
+        imageViewer = img;
+    }
     public void setCurrentIndex(int id) {
         currentIndex = id;
     }
