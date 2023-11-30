@@ -20,8 +20,7 @@ public class Listen extends JFrame implements ActionListener {
     private JPanel body;
     private List<JButton> surahs;
     private HashMap<String, Integer> map = new HashMap<>();
-    private String selection;
-    private String currentIndex = null;
+    private String selection, reciter;
     String[] data = {
             "الفاتحة - al-Fātihah [THE OPENING]",
             "البقرة - al-Baqarah [THE COW]",
@@ -187,13 +186,20 @@ public class Listen extends JFrame implements ActionListener {
     }
 
     public void continueListening() throws SQLException {
-        mp3Player = new Mp3Player(connection);
+        String path = " ", title = " ";
         String query = "select * from savedData;";
         Statement statement = connection.createStatement();
         ResultSet resultSet = statement.executeQuery(query);
         while (resultSet.next()) {
-            mp3Player.playAudio(resultSet.getString(2));
+            path = resultSet.getString(2);
+            title = resultSet.getString(3);
         }
+        if(path == "0" || title == "0"){
+            JOptionPane.showMessageDialog(this, "No Data Found!", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        mp3Player = new Mp3Player(connection, title);
+        mp3Player.playAudio(path);
     }
 
     //---------------------------------------------------------------------------------------------------------
@@ -201,27 +207,28 @@ public class Listen extends JFrame implements ActionListener {
         b1.setBackground(Color.GREEN);
         b2.setBackground(Color.ORANGE);
         b3.setBackground(Color.ORANGE);
-        selection = "QariAbdulBasit";
+        selection = "AB";
+        reciter = "Qari Abdul Basit";
         revalidate();
         repaint();
     }
 
-    //---------------------------------------------------------------------------------------------------------
     private void sortByQ2() {
         b2.setBackground(Color.GREEN);
         b1.setBackground(Color.ORANGE);
         b3.setBackground(Color.ORANGE);
-        selection = "QariAbdulRahman";
+        selection = "AR";
+        reciter = "Qari Abdul Rahman Sudais";
         revalidate();
         repaint();
     }
 
-    //---------------------------------------------------------------------------------------------------------
     private void sortByQ3() {
         b3.setBackground(Color.GREEN);
         b1.setBackground(Color.ORANGE);
         b2.setBackground(Color.ORANGE);
-        selection = "QariMishary";
+        selection = "MR";
+        reciter = "Qari Mishary bin Rashid";
         revalidate();
         repaint();
     }
@@ -237,7 +244,8 @@ public class Listen extends JFrame implements ActionListener {
             sortByQ3();
         } else {
             String path = "D:\\FAST-NUCES l215845\\5th Semester\\Software Construction & Development\\Project\\Extras\\Audios\\" + selection + "\\" + map.get(e.getActionCommand()) + ".mp3";
-            mp3Player = new Mp3Player(connection);
+            String title = e.getActionCommand() + " by " + reciter;
+            mp3Player = new Mp3Player(connection, title);
             mp3Player.playAudio(path);
         }
     }

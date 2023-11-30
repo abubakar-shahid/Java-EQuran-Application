@@ -13,7 +13,8 @@ public class ImageViewer extends JFrame {
     protected int currentIndex;
     protected List<String> imagePaths;
 
-    public ImageViewer(Connection conn){
+    //---------------------------------------------------------------------------------------------------------
+    public ImageViewer(Connection conn) {
         connection = conn;
     }
 
@@ -21,7 +22,7 @@ public class ImageViewer extends JFrame {
         setTitle("Image Viewer");
         addWindowListener(new MyWindowListener());
         setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-        setBounds(400,10,600,700);
+        setBounds(400, 10, 600, 700);
 
         imagePaths = new ArrayList<>();
         for (int i = 2; i <= 549; i++) {
@@ -96,7 +97,7 @@ public class ImageViewer extends JFrame {
     }
 
     //---------------------------------------------------------------------------------------------------------
-    private void saveState(){
+    private void saveState() {
         String query = "update saveddata set currentImage = ? where `row` = 1;";
         try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setString(1, String.valueOf(currentIndex));

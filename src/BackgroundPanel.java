@@ -8,6 +8,7 @@ import java.io.IOException;
 public class BackgroundPanel extends JPanel {
     private BufferedImage backgroundImage;
 
+    //---------------------------------------------------------------------------------------------------------
     public BackgroundPanel(String imagePath) {
         try {
             backgroundImage = ImageIO.read(new File(imagePath));
@@ -24,4 +25,5 @@ public class BackgroundPanel extends JPanel {
             g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
         }
     }
+    //---------------------------------------------------------------------------------------------------------
 }

@@ -135,6 +135,7 @@ public class OpenSpecificAyahRuku extends JFrame implements ActionListener {
     },
             data2 = {"Ayah", "Ruku"};
 
+    //---------------------------------------------------------------------------------------------------------
     public OpenSpecificAyahRuku(Connection conn) {
         connection = conn;
 
@@ -185,26 +186,6 @@ public class OpenSpecificAyahRuku extends JFrame implements ActionListener {
         addWindowListener(new MyWindowListener());
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
         setVisible(true);
-    }
-
-    //---------------------------------------------------------------------------------------------------------
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        if (e.getActionCommand() == "Open") {
-            if (select.getSelectedItem() == "Ruku") {
-                try {
-                    getRukuData();
-                } catch (SQLException ex) {
-                    throw new RuntimeException(ex);
-                }
-            } else if (select.getSelectedItem() == "Ayah") {
-                try {
-                    getAyahData();
-                } catch (SQLException ex) {
-                    throw new RuntimeException(ex);
-                }
-            }
-        }
     }
 
     private void getRukuData() throws SQLException {
@@ -260,6 +241,26 @@ public class OpenSpecificAyahRuku extends JFrame implements ActionListener {
         }
         if (!found) {
             JOptionPane.showMessageDialog(this, "Ayah Not Found!", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    //---------------------------------------------------------------------------------------------------------
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        if (e.getActionCommand() == "Open") {
+            if (select.getSelectedItem() == "Ruku") {
+                try {
+                    getRukuData();
+                } catch (SQLException ex) {
+                    throw new RuntimeException(ex);
+                }
+            } else if (select.getSelectedItem() == "Ayah") {
+                try {
+                    getAyahData();
+                } catch (SQLException ex) {
+                    throw new RuntimeException(ex);
+                }
+            }
         }
     }
 

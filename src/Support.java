@@ -154,10 +154,6 @@ public class Support extends JFrame implements ActionListener {
 
         @Override
         public void windowClosing(WindowEvent e) {
-//            int choice = JOptionPane.showConfirmDialog(null, "Do you want to exit?", "Confirm Close", JOptionPane.YES_NO_OPTION);
-//            if (choice == JOptionPane.YES_OPTION) {
-//                System.exit(0);
-//            }
             dispose();
         }
 

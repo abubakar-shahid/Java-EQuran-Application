@@ -22,16 +22,17 @@ public class Mp3Player extends JFrame {
     private JButton playButton, stopButton;
     private JLabel statusLabel;
     private JProgressBar progressBar;
-    private String filePath;
-    private long totalLength;
-    private long startTime;
+    private String filePath, title;
+    private long totalLength, startTime;
     private Timer timer;
 
-    public Mp3Player(Connection conn) {
+    //---------------------------------------------------------------------------------------------------------
+    public Mp3Player(Connection conn, String t) {
         connection = conn;
-        setTitle("MP3 Player");
+        title = t;
+        setTitle(title);
         setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-        setBounds(500,100,400,200);
+        setBounds(350, 100, 700, 200);
         addWindowListener(new MyWindowListener());
 
         playButton = new JButton("Play");
@@ -162,10 +163,11 @@ public class Mp3Player extends JFrame {
     }
 
     //---------------------------------------------------------------------------------------------------------
-    private void saveState(){
-        String query = "update saveddata set currentAudio = ? where `row` = 1;";
+    private void saveState() {
+        String query = "update saveddata set currentAudio = ?, title = ? where `row` = 1;";
         try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setString(1, filePath);
+            preparedStatement.setString(2, title);
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);

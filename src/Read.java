@@ -18,7 +18,6 @@ public class Read extends JFrame implements ActionListener {
     private JPanel body;
     private List<JButton> paras, surahs, manazil;
     private HashMap<String, Integer> para = new HashMap<>(), surah = new HashMap<>(), manzil = new HashMap<>();
-    private int currentIndex = 0;
     private int[] id1 = {0, 19, 37, 55, 73, 91, 109, 127, 145, 163, 181, 199, 217, 235, 253, 271, 289, 307,
             325, 343, 361, 379, 397, 415, 433, 451, 469, 487, 507, 527},
             id2 = {0, 1, 44, 68, 95, 114, 135, 158, 167, 186, 198, 211, 223, 229, 234, 239, 253, 263,
@@ -187,7 +186,7 @@ public class Read extends JFrame implements ActionListener {
             };
 
     //---------------------------------------------------------------------------------------------------------
-    public Read(Connection conn){
+    public Read(Connection conn) {
         connection = conn;
     }
 
@@ -251,7 +250,12 @@ public class Read extends JFrame implements ActionListener {
         Statement statement = connection.createStatement();
         ResultSet resultSet = statement.executeQuery(query);
         while (resultSet.next()) {
-            imageViewer.currentIndex = Integer.parseInt(resultSet.getString(1));
+            int x = Integer.parseInt(resultSet.getString(1));
+            if (x == 0) {
+                JOptionPane.showMessageDialog(this, "No Data Found!", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            imageViewer.currentIndex = x;
         }
         imageViewer.imageViewer();
     }
@@ -275,7 +279,6 @@ public class Read extends JFrame implements ActionListener {
         repaint();
     }
 
-    //---------------------------------------------------------------------------------------------------------
     private void sortBySurah() {
         status = 2;
         b2.setBackground(Color.GREEN);
@@ -292,7 +295,6 @@ public class Read extends JFrame implements ActionListener {
         repaint();
     }
 
-    //---------------------------------------------------------------------------------------------------------
     private void sortByManzil() {
         status = 3;
         b3.setBackground(Color.GREEN);
@@ -338,9 +340,6 @@ public class Read extends JFrame implements ActionListener {
 
         @Override
         public void windowClosing(WindowEvent e) {
-            if (imageViewer != null) {
-                currentIndex = imageViewer.currentIndex;
-            }
             dispose();
         }
 
