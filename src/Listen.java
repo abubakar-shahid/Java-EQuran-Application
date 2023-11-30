@@ -5,14 +5,17 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class Listen extends JFrame implements ActionListener {
+    private Mp3Player mp3Player;
     private JButton b1, b2, b3;
     private JScrollPane scrollPane;
     private JPanel body;
     private List<JButton> surahs;
-    private int selection;
+    private HashMap<String, Integer> map = new HashMap<>();
+    private String selection;
     private int currentIndex = 0;
     String[] data = {
             "الفاتحة - al-Fātihah [THE OPENING]",
@@ -137,6 +140,14 @@ public class Listen extends JFrame implements ActionListener {
     }
 
     public void startListening() {
+        //Frame
+        setLayout(new BorderLayout());
+        setTitle("E-Qura'an Application");
+        setBounds(400, 10, 600, 700);
+        addWindowListener(new MyWindowListener());
+        setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
+        setVisible(true);
+
         b1 = new JButton("Qari Abdul Basit");
         b1.addActionListener(this);
         b2 = new JButton("Qari Abdul Rahman Sudais");
@@ -148,6 +159,7 @@ public class Listen extends JFrame implements ActionListener {
         header.add(b1);
         header.add(b2);
         header.add(b3);
+        add(header, BorderLayout.NORTH);
 
         //Body
         surahs = new ArrayList<>();
@@ -156,6 +168,7 @@ public class Listen extends JFrame implements ActionListener {
             JButton temp = new JButton(st);
             temp.addActionListener(this);
             surahs.add(temp);
+            map.put(st, i + 1);
         }
 
         body = new JPanel(new GridLayout(114, 1));
@@ -166,15 +179,6 @@ public class Listen extends JFrame implements ActionListener {
         add(scrollPane, BorderLayout.CENTER);
 
         sortByQ1();
-
-        //Frame
-        setLayout(new BorderLayout());
-        setTitle("E-Qura'an Application");
-        setBounds(400,10,600,700);
-        addWindowListener(new MyWindowListener());
-        setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
-        setVisible(true);
-        add(header, BorderLayout.NORTH);
     }
 
     public void continueListening() {
@@ -190,7 +194,7 @@ public class Listen extends JFrame implements ActionListener {
         b1.setBackground(Color.GREEN);
         b2.setBackground(Color.ORANGE);
         b3.setBackground(Color.ORANGE);
-        selection = 1;
+        selection = "QariAbdulBasit";
         revalidate();
         repaint();
     }
@@ -200,7 +204,7 @@ public class Listen extends JFrame implements ActionListener {
         b2.setBackground(Color.GREEN);
         b1.setBackground(Color.ORANGE);
         b3.setBackground(Color.ORANGE);
-        selection = 2;
+        selection = "QariAbdulRahman";
         revalidate();
         repaint();
     }
@@ -210,7 +214,7 @@ public class Listen extends JFrame implements ActionListener {
         b3.setBackground(Color.GREEN);
         b1.setBackground(Color.ORANGE);
         b2.setBackground(Color.ORANGE);
-        selection = 3;
+        selection = "QariMishary";
         revalidate();
         repaint();
     }
@@ -224,6 +228,10 @@ public class Listen extends JFrame implements ActionListener {
             sortByQ2();
         } else if (e.getActionCommand() == "Qari Mishary bin Rashid") {
             sortByQ3();
+        } else {
+            String path = "D:\\FAST-NUCES l215845\\5th Semester\\Software Construction & Development\\Project\\Extras\\Audios\\" + selection + "\\" + map.get(e.getActionCommand()) + ".mp3";
+            mp3Player = new Mp3Player();
+            mp3Player.playAudio(path);
         }
     }
 
@@ -235,10 +243,6 @@ public class Listen extends JFrame implements ActionListener {
 
         @Override
         public void windowClosing(WindowEvent e) {
-//            int choice = JOptionPane.showConfirmDialog(null, "Do you want to exit?", "Confirm Close", JOptionPane.YES_NO_OPTION);
-//            if (choice == JOptionPane.YES_OPTION) {
-//                System.exit(0);
-//            }
             dispose();
         }
 

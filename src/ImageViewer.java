@@ -88,15 +88,6 @@ public class ImageViewer extends JFrame {
         showImage();
     }
 
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                new ImageViewer();
-            }
-        });
-    }
-
     //---------------------------------------------------------------------------------------------------------
     class MyWindowListener implements WindowListener {
         @Override
