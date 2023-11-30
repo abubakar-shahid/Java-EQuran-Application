@@ -1,11 +1,17 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 public class Read extends JFrame implements ActionListener {
+    private Connection connection;
+    private ImageViewer imageViewer;
     private int status;
     private JButton b1, b2, b3;
     private JScrollPane scrollPane;
@@ -13,7 +19,6 @@ public class Read extends JFrame implements ActionListener {
     private List<JButton> paras, surahs, manazil;
     private HashMap<String, Integer> para = new HashMap<>(), surah = new HashMap<>(), manzil = new HashMap<>();
     private int currentIndex = 0;
-    private ImageViewer imageViewer;
     private int[] id1 = {0, 19, 37, 55, 73, 91, 109, 127, 145, 163, 181, 199, 217, 235, 253, 271, 289, 307,
             325, 343, 361, 379, 397, 415, 433, 451, 469, 487, 507, 527},
             id2 = {0, 1, 44, 68, 95, 114, 135, 158, 167, 186, 198, 211, 223, 229, 234, 239, 253, 263,
@@ -182,11 +187,8 @@ public class Read extends JFrame implements ActionListener {
             };
 
     //---------------------------------------------------------------------------------------------------------
-    public Read(ImageViewer img){
-        imageViewer = img;
-    }
-    public void setCurrentIndex(int id) {
-        currentIndex = id;
+    public Read(Connection conn){
+        connection = conn;
     }
 
     public void startReading() {
@@ -243,14 +245,15 @@ public class Read extends JFrame implements ActionListener {
         add(header, BorderLayout.NORTH);
     }
 
-    public void continueReading(int pageNo) {
-        imageViewer = new ImageViewer();
-        imageViewer.currentIndex = pageNo;
+    public void continueReading() throws SQLException {
+        imageViewer = new ImageViewer(connection);
+        String query = "select * from savedData;";
+        Statement statement = connection.createStatement();
+        ResultSet resultSet = statement.executeQuery(query);
+        while (resultSet.next()) {
+            imageViewer.currentIndex = Integer.parseInt(resultSet.getString(1));
+        }
         imageViewer.imageViewer();
-    }
-
-    public int getCurrentIndex() {
-        return currentIndex;
     }
 
     //---------------------------------------------------------------------------------------------------------
@@ -314,7 +317,7 @@ public class Read extends JFrame implements ActionListener {
             case "Surah No." -> sortBySurah();
             case "Manzil" -> sortByManzil();
             default -> {
-                imageViewer = new ImageViewer();
+                imageViewer = new ImageViewer(connection);
                 if (status == 1) {
                     this.imageViewer.currentIndex = this.para.get(e.getActionCommand());
                 } else if (status == 2) {

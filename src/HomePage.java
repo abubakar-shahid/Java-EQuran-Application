@@ -8,23 +8,20 @@ import java.sql.*;
 
 public class HomePage extends JFrame implements ActionListener {
     private static Connection connection;
-    private ImageViewer imageViewer;
-    private Read rd = new Read(imageViewer);
-    private Listen ls = new Listen();
+    private Read rd;
+    private Listen ls;
     private JMenuBar bar;
     private JMenu menu, it1, it2;
     private JMenuItem it3;
     private JMenuItem startReading, continueReading, startListening, continueListening, openSpecificAyahRuku;
-    private int currentPage, currentAudio;
     private JButton exit;
     private JPanel footer;
 
     //---------------------------------------------------------------------------------------------------------
     public void runApplication(Connection conn) throws SQLException {
         connection = conn;
-        getCurrentStates();
-        rd.setCurrentIndex(currentPage);
-        ls.setCurrentIndex(currentAudio);
+        rd = new Read(connection);
+        ls = new Listen(connection);
 
         //Menu
         bar = new JMenuBar();
@@ -115,30 +112,6 @@ public class HomePage extends JFrame implements ActionListener {
     }
 
     //---------------------------------------------------------------------------------------------------------
-    private void getCurrentStates() throws SQLException {
-        String query = "select * from savedData;";
-        Statement statement = connection.createStatement();
-        ResultSet resultSet = statement.executeQuery(query);
-        while (resultSet.next()) {
-            currentPage = Integer.parseInt(resultSet.getString(1));
-            currentAudio = Integer.parseInt(resultSet.getString(2));
-        }
-    }
-
-    //---------------------------------------------------------------------------------------------------------
-    private void setCurrentStates() throws SQLException {
-        String query = "delete from savedData;";
-        PreparedStatement preparedStatement1 = connection.prepareStatement(query);
-        preparedStatement1.executeUpdate();
-        query = "insert into savedData values (?, ?)";
-        try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-            preparedStatement.setString(1, String.valueOf(rd.getCurrentIndex()));
-            preparedStatement.setString(2, String.valueOf(ls.getCurrentIndex()));
-            preparedStatement.executeUpdate();
-        }
-    }
-
-    //---------------------------------------------------------------------------------------------------------
     @Override
     public void actionPerformed(ActionEvent e) {
         switch (e.getActionCommand()) {
@@ -149,15 +122,21 @@ public class HomePage extends JFrame implements ActionListener {
                 rd.startReading();
                 break;
             case "Continue Reading":
-                rd.setCurrentIndex(currentPage);
-                rd.continueReading(currentPage);
+                try {
+                    rd.continueReading();
+                } catch (SQLException ex) {
+                    throw new RuntimeException(ex);
+                }
                 break;
             case "Start Listening":
                 ls.startListening();
                 break;
             case "Continue Listening":
-                ls.setCurrentIndex(currentAudio);
-                //ls.continueListening();
+                try {
+                    ls.continueListening();
+                } catch (SQLException ex) {
+                    throw new RuntimeException(ex);
+                }
                 break;
             case "Open Specific Ayah/Ruku":
                 OpenSpecificAyahRuku obj = new OpenSpecificAyahRuku(connection);
@@ -180,11 +159,6 @@ public class HomePage extends JFrame implements ActionListener {
         public void windowClosing(WindowEvent e) {
             int choice = JOptionPane.showConfirmDialog(null, "Do you want to exit?", "Confirm Close", JOptionPane.YES_NO_OPTION);
             if (choice == JOptionPane.YES_OPTION) {
-                try {
-                    setCurrentStates();
-                } catch (SQLException ex) {
-                    throw new RuntimeException(ex);
-                }
                 System.exit(0);
             }
         }

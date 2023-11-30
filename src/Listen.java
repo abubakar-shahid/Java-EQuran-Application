@@ -4,11 +4,16 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 public class Listen extends JFrame implements ActionListener {
+    private Connection connection;
     private Mp3Player mp3Player;
     private JButton b1, b2, b3;
     private JScrollPane scrollPane;
@@ -16,7 +21,7 @@ public class Listen extends JFrame implements ActionListener {
     private List<JButton> surahs;
     private HashMap<String, Integer> map = new HashMap<>();
     private String selection;
-    private int currentIndex = 0;
+    private String currentIndex = null;
     String[] data = {
             "الفاتحة - al-Fātihah [THE OPENING]",
             "البقرة - al-Baqarah [THE COW]",
@@ -135,8 +140,8 @@ public class Listen extends JFrame implements ActionListener {
     };
 
     //---------------------------------------------------------------------------------------------------------
-    public void setCurrentIndex(int id) {
-        currentIndex = id;
+    public Listen(Connection conn){
+        connection = conn;
     }
 
     public void startListening() {
@@ -181,12 +186,14 @@ public class Listen extends JFrame implements ActionListener {
         sortByQ1();
     }
 
-    public void continueListening() {
-
-    }
-
-    public int getCurrentIndex() {
-        return currentIndex;
+    public void continueListening() throws SQLException {
+        mp3Player = new Mp3Player(connection);
+        String query = "select * from savedData;";
+        Statement statement = connection.createStatement();
+        ResultSet resultSet = statement.executeQuery(query);
+        while (resultSet.next()) {
+            mp3Player.playAudio(resultSet.getString(2));
+        }
     }
 
     //---------------------------------------------------------------------------------------------------------
@@ -230,7 +237,7 @@ public class Listen extends JFrame implements ActionListener {
             sortByQ3();
         } else {
             String path = "D:\\FAST-NUCES l215845\\5th Semester\\Software Construction & Development\\Project\\Extras\\Audios\\" + selection + "\\" + map.get(e.getActionCommand()) + ".mp3";
-            mp3Player = new Mp3Player();
+            mp3Player = new Mp3Player(connection);
             mp3Player.playAudio(path);
         }
     }

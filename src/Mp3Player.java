@@ -11,9 +11,13 @@ import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.text.DecimalFormat;
 
 public class Mp3Player extends JFrame {
+    private Connection connection;
     private AdvancedPlayer player;
     private JButton playButton, stopButton;
     private JLabel statusLabel;
@@ -23,7 +27,8 @@ public class Mp3Player extends JFrame {
     private long startTime;
     private Timer timer;
 
-    public Mp3Player() {
+    public Mp3Player(Connection conn) {
+        connection = conn;
         setTitle("MP3 Player");
         setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         setBounds(500,100,400,200);
@@ -157,6 +162,17 @@ public class Mp3Player extends JFrame {
     }
 
     //---------------------------------------------------------------------------------------------------------
+    private void saveState(){
+        String query = "update saveddata set currentAudio = ? where `row` = 1;";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setString(1, filePath);
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    //---------------------------------------------------------------------------------------------------------
     class MyWindowListener implements WindowListener {
         @Override
         public void windowOpened(WindowEvent e) {
@@ -165,6 +181,7 @@ public class Mp3Player extends JFrame {
         @Override
         public void windowClosing(WindowEvent e) {
             stopAudio();
+            saveState();
             dispose();
         }
 

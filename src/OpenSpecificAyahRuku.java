@@ -223,7 +223,7 @@ public class OpenSpecificAyahRuku extends JFrame implements ActionListener {
         while (resultSet.next()) {
             if (s == Integer.parseInt(resultSet.getString(1))
                     && r == Integer.parseInt(resultSet.getString(2))) {
-                imageViewer = new ImageViewer();
+                imageViewer = new ImageViewer(connection);
                 imageViewer.currentIndex = (Integer.parseInt(resultSet.getString(3))) - 2;
                 imageViewer.imageViewer();
                 found = true;
@@ -251,7 +251,7 @@ public class OpenSpecificAyahRuku extends JFrame implements ActionListener {
         while (resultSet.next()) {
             if (s == Integer.parseInt(resultSet.getString(1))
                     && a == Integer.parseInt(resultSet.getString(2))) {
-                imageViewer = new ImageViewer();
+                imageViewer = new ImageViewer(connection);
                 imageViewer.currentIndex = (Integer.parseInt(resultSet.getString(3))) - 2;
                 imageViewer.imageViewer();
                 found = true;

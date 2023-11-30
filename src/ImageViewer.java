@@ -1,13 +1,21 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class ImageViewer extends JFrame {
+    private Connection connection;
     protected JLabel imageLabel;
     protected int currentIndex;
     protected List<String> imagePaths;
+
+    public ImageViewer(Connection conn){
+        connection = conn;
+    }
 
     public void imageViewer() {
         setTitle("Image Viewer");
@@ -71,7 +79,6 @@ public class ImageViewer extends JFrame {
     }
 
     private void showImage() {
-        //System.out.println("in showImage() : " + currentIndex + " , " + imagePaths.get(currentIndex));
         ImageIcon imageIcon = new ImageIcon(imagePaths.get(currentIndex));
         Image image = imageIcon.getImage().getScaledInstance(500, 600, Image.SCALE_DEFAULT);
         imageIcon = new ImageIcon(image);
@@ -89,6 +96,17 @@ public class ImageViewer extends JFrame {
     }
 
     //---------------------------------------------------------------------------------------------------------
+    private void saveState(){
+        String query = "update saveddata set currentImage = ? where `row` = 1;";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setString(1, String.valueOf(currentIndex));
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    //---------------------------------------------------------------------------------------------------------
     class MyWindowListener implements WindowListener {
         @Override
         public void windowOpened(WindowEvent e) {
@@ -96,6 +114,7 @@ public class ImageViewer extends JFrame {
 
         @Override
         public void windowClosing(WindowEvent e) {
+            saveState();
             dispose();
         }
 
