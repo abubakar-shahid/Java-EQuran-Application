@@ -194,7 +194,7 @@ public class Listen extends JFrame implements ActionListener {
             path = resultSet.getString(2);
             title = resultSet.getString(3);
         }
-        if(path == "0" || title == "0"){
+        if(path.equals("0") || title.equals("0")){
             JOptionPane.showMessageDialog(this, "No Data Found!", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }

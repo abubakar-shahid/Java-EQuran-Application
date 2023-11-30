@@ -251,7 +251,7 @@ public class Read extends JFrame implements ActionListener {
         ResultSet resultSet = statement.executeQuery(query);
         while (resultSet.next()) {
             int x = Integer.parseInt(resultSet.getString(1));
-            if (x == 0) {
+            if (x == -1) {
                 JOptionPane.showMessageDialog(this, "No Data Found!", "Error", JOptionPane.ERROR_MESSAGE);
                 return;
             }
