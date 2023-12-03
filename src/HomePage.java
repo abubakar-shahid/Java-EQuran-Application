@@ -1,3 +1,5 @@
+import Membership.PurchaseForm;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -116,7 +118,8 @@ public class HomePage extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         switch (e.getActionCommand()) {
             case "Support this App":
-                Support sp = new Support();
+                //Support sp = new Support();
+                PurchaseForm payment = new PurchaseForm();
                 break;
             case "Start Reading":
                 rd.startReading();
