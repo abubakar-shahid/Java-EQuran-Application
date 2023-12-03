@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>your.group.id</groupId>
+    <artifactId>your-artifact-id</artifactId>
+    <version>1.0.0</version>
+
+    <dependencies>
+        <!-- Add the dependency for org.json.simple -->
+        <dependency>
+            <groupId>com.googlecode.json-simple</groupId>
+            <artifactId>json-simple</artifactId>
+            <version>1.1.1</version> <!-- Replace with the latest version available -->
+        </dependency>
+        <!-- Add other dependencies if needed -->
+    </dependencies>
+
+    <build>
+        <extensions>
+            <extension>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>jaxws-maven-plugin</artifactId>
+                <version>3.3.0</version>
+            </extension>
+        </extensions>
+
+        <!-- Add the plugin configuration for jaxws-maven-plugin if needed -->
+    </build>
+</project>
